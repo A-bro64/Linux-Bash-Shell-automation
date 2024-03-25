@@ -1,0 +1,11 @@
+#!/bin/bash
+
+echo -n "Enter the length of the password : "
+read num
+
+if [[ $num -lt 8 ]] || [[ $num -gt 32 ]]; then
+    echo "Password length must be between 8 to 32 characters"
+else
+    echo "************************************"
+    echo "Here is your random password of length $num : $(tr -dc 'A-Za-z0-9' < /dev/urandom | head -c $num)"
+fi

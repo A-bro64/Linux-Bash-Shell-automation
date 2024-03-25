@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Directory to store user login and command logs
+LOG_DIR="/root/Users_Logs"
+
+# Create log directory if it doesn't exist
+mkdir -p "$LOG_DIR"
+
+# Get current date and time
+DATE=$(date +'%Y-%m-%d_%H-%M-%S')
+
+# Get list of logged-in users
+USERS=$(who | awk '{print $1}' | sort | uniq)
+
+# Loop through each logged-in user
+for USER in $USERS; do
+    # Log user logins
+    who | grep "^$USER " > "$LOG_DIR/user_logins_$USER_$DATE.log"
+    
+    # Log user commands
+    history | grep "^ *$USER" > "$LOG_DIR/user_commands_$USER_$DATE.log"
+
+    # Set permissions for log files SecOps
+    chmod 700 "$LOG_DIR/user_commands_$USER_$DATE.log"
+    chmod 700 "$LOG_DIR/user_logins_$USER_$DATE.log"
+done
+
+echo "User logins and commands logged successfully."

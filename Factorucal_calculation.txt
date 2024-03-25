@@ -1,0 +1,18 @@
+#!/bin/bash
+
+echo -n "Enter number: "
+read n
+
+factorial=1
+
+while [ $n -gt 1 ]; do
+    factorial=$((factorial * n))
+    n=$((n - 1))
+done
+
+echo "Factorial is: $factorial"
+
+
+
+#Data Analysis:data analysis and statistics.
+#Software development: Automation.
