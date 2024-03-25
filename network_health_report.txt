@@ -1,0 +1,30 @@
+#!/bin/bash
+
+system_health() {
+    echo "######################## IP Details ###################"
+    /usr/sbin/ifconfig
+    echo
+    echo "######################## Uptime Details ################"
+    uptime
+    echo
+    echo "####################### Last Login Details ###############"
+    last
+    echo
+    echo "####################### Disk Space Utilization Details #############"
+    df -kh
+    echo
+    echo "######################## Free Memory Details #####################"
+    free -m
+    echo
+    echo "################### Network Traffic Details ##################"
+    iftop -t -s 3 -n -N -P -L 5
+    echo "################### Network Traffic Details ##################"
+    nload -t 3000 -u K
+
+}
+
+# Redirect both stdout and stderr of system_health function to a file
+system_health &> /root/System_Details_$(date +%d_%m_%y_H_%M_%S).txt
+
+# Remove older system detail files, keeping only the 10 most recent ones use Crontab -e
+rm -f $(ls -t /root/System_Details_*.txt | awk 'NR>10')

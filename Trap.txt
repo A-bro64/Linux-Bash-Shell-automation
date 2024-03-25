@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Trap SIGINT (Control-C) and SIGTSTP (Control-Z) signals
+trap 'echo "Control-C cannot terminate this script."' INT
+trap 'echo "Control-Z cannot terminate this script."' TSTP
+
+echo "Enter a string (type 'EXIT' to exit)" #Here you can create worning pup-up on terminal
+while true; do 
+    echo -n "Running: "
+    read user_input
+
+    if [[ "$user_input" = "EXIT" ]]; then
+        break
+    fi
+done
+
+echo "You exited the script."
+
+#Basicly the user traps in to the continuous loop with ignore ctr+C and ctr+Z
+#Most of them will reboot the server.
