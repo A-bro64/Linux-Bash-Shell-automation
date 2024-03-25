@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Backup /home directory to /root/backup
+rsync -rv --delete "/home/" "/root/backup"
+
+# Check if the current hour is 23 (11 PM)
+if [[ $(date +'%H') -eq 23 ]]; then
+echo "Sending Email for Today's File Backup"
+TOTAL_FILES=$(find /root/backup/ -mtime -1 -type f -print | wc -l)
+echo "$TOTAL_FILES"
+   
+smtp "abrordirect@gmail.com" -type email
+else
+    echo "Will Send the Email at 11 PM EST"
+fi
+
+
+
+# The script is designed to perform a file backup operation using rsync and send an email 
+# notification if the backup is performed at 11 PM EST or 23:00.

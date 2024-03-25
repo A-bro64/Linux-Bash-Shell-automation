@@ -1,0 +1,32 @@
+#!/bin/bash
+
+log_compare () {
+    echo "Generating Diff between last hour logs and latest logs"
+    files=($(find /root/Project/LogBackup/ -type f -name "*.log"))
+    for item in "${files[@]}"
+    do
+        echo "Working on Log File : $item"
+        LOG_FILE_NAME=$(basename "$item")
+        diff "/var/log/Log/$LOG_FILE_NAME" "/root/Project/LogBackup/$LOG_FILE_NAME" | grep "<" | awk '{$1=""}1' | sed 's/^ *//' > "/root/Project/LogDiff/$LOG_FILE_NAME"
+    done
+    error_finder
+}
+
+error_finder() {
+    # Add your error finding logic here
+    echo "Error finder function placeholder"
+}
+
+# Backup Logs Files for the first time from /var/log to LogBackup Directory
+mkdir -p /root/Project/LogBackup
+mkdir -p /root/Project/LogDiff
+rm -f /root/Project/LogDiff/final_output.txt
+
+if [ -z "$(ls -A /root/Project/LogBackup)" ]
+then
+    cp -p /var/log/Log/*.log /root/Project/LogBackup
+    echo "Script will compare the logs with the next scheduled time"
+else
+    echo "Directory is not empty, so skipping Log Backup"
+    log_compare
+fi
