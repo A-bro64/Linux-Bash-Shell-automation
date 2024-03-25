@@ -1,0 +1,19 @@
+#!/bin/bash
+
+system_health () {
+
+echo "################# IP Details ################"
+/usr/sbin/ifconfig
+echo
+echo "################# Uptime Details ############"
+uptime
+echo
+echo "################# Disk Space Utilization Details ############"
+df -kh
+echo
+echo "################# Free Memory Details ########################"
+free -m
+}
+
+system_heelth &> /root/System_Details_ `date +%d_%m_%y_%H_%M_%S`.txt
+rm -f `ls -t /root/System_Details_*txt | awk 'R>10'`

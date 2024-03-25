@@ -1,0 +1,109 @@
+#!/bin/bash
+
+# Function to display the menu
+display_menu() {
+    echo "============================="
+    echo "      Everyday Toolkit       "
+    echo "============================="
+    echo "1. List files in a directory"
+    echo "2. Search for a file"
+    echo "3. Check disk usage"
+    echo "4. Monitor system resources"
+    echo "5. Backup important files"
+    echo "6. Update system packages"
+    echo "7. Perform network diagnostics"
+    echo "8. View system information"
+    echo "9. Exit"
+    echo "============================="
+}
+
+# Function to log messages
+log_message() {
+    local level="$1"
+    local message="$2"
+    echo "$(date +"%Y-%m-%d %H:%M:%S") [$level] - $message" >> "$log_file"
+}
+
+# Function to handle errors
+handle_error() {
+    local message="$1"
+    echo "Error: $message"
+    log_message "ERROR" "$message"
+}
+
+# Function to list files in a directory
+list_files() {
+    read -p "Enter the directory path: " directory
+    ls -l "$directory" || handle_error "Failed to list files in directory $directory"
+    log_message "INFO" "Listed files in directory $directory"
+}
+
+# Function to search for a file
+search_file() {
+    read -p "Enter the file name: " filename
+    find / -name "$filename" || handle_error "Failed to find file $filename"
+    log_message "INFO" "Searched for file $filename"
+}
+
+# Function to check disk usage
+check_disk_usage() {
+    df -h || handle_error "Failed to check disk usage"
+    log_message "INFO" "Checked disk usage"
+}
+
+# Function to monitor system resources
+monitor_resources() {
+    top || handle_error "Failed to monitor system resources"
+    log_message "INFO" "Monitored system resources"
+}
+
+# Function to backup important files
+backup_files() {
+    read -p "Enter the directory to backup: " source_dir
+    read -p "Enter the backup destination directory: " dest_dir
+    tar -czvf "$dest_dir/backup_$(date +%Y%m%d_%H%M%S).tar.gz" "$source_dir" || handle_error "Failed to backup files"
+    log_message "INFO" "Backed up files from $source_dir to $dest_dir"
+}
+
+# Function to update system packages
+update_packages() {
+    sudo apt update && sudo apt upgrade -y || handle_error "Failed to update system packages"
+    log_message "INFO" "Updated system packages"
+}
+
+# Function to perform network diagnostics
+network_diagnostics() {
+    ping -c 5 google.com || handle_error "Failed network diagnostics"
+    log_message "INFO" "Performed network diagnostics"
+}
+
+# Function to view system information
+view_system_info() {
+    uname -a || handle_error "Failed to retrieve system information"
+    log_message "INFO" "Viewed system information"
+}
+
+# Main script
+log_file="toolkit.log"
+
+# Create log file if it doesn't exist
+touch "$log_file" || { echo "Error: Unable to create log file $log_file"; exit 1; }
+
+while true; do
+    display_menu
+
+    read -p "Enter your choice (1-9): " choice
+
+    case $choice in
+        1) list_files ;;
+        2) search_file ;;
+        3) check_disk_usage ;;
+        4) monitor_resources ;;
+        5) backup_files ;;
+        6) update_packages ;;
+        7) network_diagnostics ;;
+        8) view_system_info ;;
+        9) echo "Exiting..."; exit ;;
+        *) echo "Invalid choice. Please enter a number from 1 to 9." ;;
+    esac
+done

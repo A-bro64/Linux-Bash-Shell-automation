@@ -1,0 +1,21 @@
+
+#!/bin/bash
+
+i=0
+
+while [ $i -le 10 ]
+
+do
+
+echo ${i} marta #edit add loop work code 
+
+for ((i = start_number; i <= end_number; i++)); do
+
+echo "$i marta"
+
+touch "${file_prefix}${i}.txt"
+
+touch $((i++)).txt
+
+done
+

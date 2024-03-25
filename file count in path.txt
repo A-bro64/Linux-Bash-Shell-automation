@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Check if a directory path is provided as an argument
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <directory>"
+    exit 1
+fi
+
+# Assign the directory path to a variable
+directory="$1"
+
+# Check if the provided path is a directory
+if [ ! -d "$directory" ]; then
+    echo "$directory is not a valid directory."
+    exit 1
+fi
+
+# Count the number of files and directories in the specified directory
+file_count=$(find "$directory" -type f | wc -l)
+dir_count=$(find "$directory" -type d | wc -l)
+
+# Print the results
+echo "Number of files in $directory: $file_count"
+echo "Number of directories in $directory: $dir_count"
